@@ -12,20 +12,6 @@ namespace CollegeApp.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<StudentDTO>> GetStudents()
         {
-
-            //var students = new List<StudentDTO>();
-
-            //foreach (Student student in CollegeRepository.Students)
-            //{
-            //    StudentDTO studentDTO = new StudentDTO() 
-            //    {
-            //        Id = student.Id,
-            //        Name = student.Name,
-            //        Address = student.Address,
-            //        Email = student.Email
-            //    };
-            //    students.Add(studentDTO);
-            //}
             var students = CollegeRepository.Students.Select(x => new StudentDTO()
             {
                 Id = x.Id,
@@ -82,6 +68,34 @@ namespace CollegeApp.Controllers
                 Email = studen.Email
             };
             return Ok(studentDTO);
+        }
+
+        [HttpPost]
+        [Route("Create")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<StudentDTO> PostStudent([FromBody] StudentDTO model)
+        {
+            if (model == null)
+                return BadRequest();
+
+            int newId = CollegeRepository.Students.LastOrDefault().Id + 1;
+
+            Student student = new Student 
+            {
+                Id =newId,
+                Name = model.Name,
+                Address = model.Address,
+                Email = model.Email
+            };
+
+            CollegeRepository.Students.Add(student);
+
+            model.Id = newId;
+
+            return Ok(model);
+
         }
 
         [HttpDelete("{id:int:min(1):max(100)}", Name = "DeleteStudentById")]
