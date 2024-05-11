@@ -80,6 +80,12 @@ namespace CollegeApp.Controllers
             if (model == null)
                 return BadRequest();
 
+            //if (model.AdmissionDate < DateTime.Now)
+            //{
+            //    ModelState.AddModelError("AdmissionDate Error", "AdmissionDate must be greater than or equal to the present date");
+            //    return BadRequest(ModelState);
+            //}
+
             int newId = CollegeRepository.Students.LastOrDefault().Id + 1;
 
             Student student = new Student
