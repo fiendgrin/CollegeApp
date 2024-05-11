@@ -20,8 +20,8 @@ namespace CollegeApp.Models
         [StringLength(100)]
         public string Address { get; set; }
 
-        [DataCheck]
-        public DateTime AdmissionDate { get; set; }
+        //[DataCheck]
+        //public DateTime AdmissionDate { get; set; }
 
         //[Range(18, 150)]
         //public int Age { get; set; }
