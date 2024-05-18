@@ -8,11 +8,20 @@ namespace CollegeApp.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
+        private readonly ILogger<StudentController> _logger;
+
+        public StudentController(ILogger<StudentController> logger)
+        {
+            _logger = logger;
+        }
+
         [HttpGet("All", Name = "GetAllStudents")]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<StudentDTO>> GetStudents()
         {
+            _logger.LogInformation($"{nameof(GetStudents)} method executed");
+
             var students = CollegeRepository.Students.Select(x => new StudentDTO()
             {
                 Id = x.Id,
@@ -30,12 +39,19 @@ namespace CollegeApp.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<StudentDTO> GetStudentById(int id)
         {
-            if (id <= 0)
+            if (id <= 0) 
+            {
+                _logger.LogError($"from {nameof(GetStudentById)} - \"id\" can not be null or negative");
                 return BadRequest();
+            }
+               
 
             var studen = CollegeRepository.Students.FirstOrDefault(s => s.Id == id);
             if (studen == null)
+            {
+                _logger.LogError($"from {nameof(GetStudentById)} - \"id\" not found");
                 return NotFound($"{id} not found");
+            }
 
             var studentDTO = new StudentDTO()
             {
