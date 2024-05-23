@@ -1,12 +1,17 @@
+using CollegeApp.Data;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
-    .WriteTo.File("Log/log.txt",rollingInterval: RollingInterval.Day)
+    .WriteTo.File("Log/log.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
-
+builder.Services.AddDbContext<CollegeDBContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CollegeAppDbConnection"));
+});
 builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
