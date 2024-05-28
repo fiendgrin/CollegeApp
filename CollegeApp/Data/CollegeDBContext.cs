@@ -1,14 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CollegeApp.Data;
+using CollegeApp.Data.Config;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollegeApp.Data
 {
     public class CollegeDBContext : DbContext
     {
-        public CollegeDBContext(DbContextOptions<CollegeDBContext> options) :base(options)
+        public CollegeDBContext(DbContextOptions<CollegeDBContext> options) : base(options)
         {
-            
-        }
-        DbSet<Student> StudentsDbTable { get; set; }
 
+        }
+        public DbSet<Student> StudentsDbTable { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new StudentConfig());
+        }
     }
 }

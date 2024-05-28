@@ -20,6 +20,9 @@ namespace CollegeApp.Models
         [StringLength(100)]
         public string Address { get; set; }
 
+        public string DOB { get; set; }
+
+
         //[DataCheck]
         //public DateTime AdmissionDate { get; set; }
 
