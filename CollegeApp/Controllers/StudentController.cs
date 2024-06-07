@@ -29,7 +29,7 @@ namespace CollegeApp.Controllers
             {
                 Name = x.Name,
                 Address = x.Address,
-                DOB = x.DOB.ToShortDateString(),
+                DOB = x.DOB,
                 Email = x.Email,
                 Id = x.Id,
             });
@@ -132,13 +132,25 @@ namespace CollegeApp.Controllers
         public ActionResult UpdateStudent([FromBody] StudentDTO model)
         {
             if (model == null || model.Id <= 0) return BadRequest();
-            var existingStudent = _dBContext.StudentsDbTable.Where(s => s.Id == model.Id).FirstOrDefault();
+            var existingStudent = _dBContext.StudentsDbTable.AsNoTracking().Where(s => s.Id == model.Id).FirstOrDefault();
             if (existingStudent == null) return NotFound();
 
-            existingStudent.Email = model.Email;
-            existingStudent.Name = model.Name;
-            existingStudent.Address = model.Address;
-            existingStudent.DOB = Convert.ToDateTime(model.DOB);
+            var newRecord = new Student()
+            {
+                Id = existingStudent.Id,
+                Name = model.Name,
+                Address = model.Address,
+                Email = model.Email,
+                DOB= model.DOB,
+            };
+
+            _dBContext.StudentsDbTable.Update(newRecord);
+
+            //existingStudent.Email = model.Email;
+            //existingStudent.Name = model.Name;
+            //existingStudent.Address = model.Address;
+            //existingStudent.DOB = Convert.ToDateTime(model.DOB);
+
             _dBContext.SaveChanges();
 
             return NoContent();
