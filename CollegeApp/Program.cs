@@ -1,3 +1,4 @@
+using CollegeApp.Configurations;
 using CollegeApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<CollegeDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("CollegeAppDbConnection"));
 });
+builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
 builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
