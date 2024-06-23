@@ -12,12 +12,10 @@ namespace CollegeApp.Controllers
     public class StudentController : ControllerBase
     {
         private readonly ILogger<StudentController> _logger;
-        private readonly CollegeDBContext _dBContext;
         private readonly IMapper _mapper;
-        public StudentController(ILogger<StudentController> logger, CollegeDBContext dBContext, IMapper mapper)
+        public StudentController(ILogger<StudentController> logger, IMapper mapper)
         {
             _logger = logger;
-            _dBContext = dBContext;
             _mapper = mapper;
         }
 
@@ -48,7 +46,6 @@ namespace CollegeApp.Controllers
             }
 
 
-            var students = await _dBContext.StudentsDbTable.FirstOrDefaultAsync(s => s.Id == id);
             if (students == null)
             {
                 _logger.LogError($"from {nameof(GetStudentById)} - \"id\" not found");
